@@ -317,7 +317,7 @@
                 platformInfo = await response.json();
                 
                 const platformBadge = document.getElementById('platform-badge');
-                const platform = platformInfo.platform === 'windows' ? 'Windows' : 'Unix/Linux';
+                const platform = platformInfo.platform === 'windows' ? 'Running on Windows' : 'Running on Unix/Linux';
                 platformBadge.textContent = platform;
                 platformBadge.title = `${platformInfo.system} ${platformInfo.machine}`;
             } catch (error) {
