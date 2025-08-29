@@ -48,6 +48,22 @@
             border-bottom: 1px solid var(--border-color);
             margin-bottom: 1rem;
         }
+
+        .platform-info {
+            padding: 0 1.5rem 1rem 1.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .platform-badge {
+            display: inline-block;
+            background-color: var(--accent-primary);
+            color: var(--bg-main);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
         
         .nav-pills .nav-link {
             color: var(--text-secondary);
@@ -80,6 +96,13 @@
             font-weight: 600;
             margin-bottom: 1.5rem;
             color: var(--text-primary);
+        }
+
+        .command-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            font-style: italic;
         }
 
         .form-card {
@@ -225,6 +248,12 @@
             align-items: center;
             gap: 0.5rem;
         }
+
+        .no-commands {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
     </style>
 </head>
 <body>
@@ -232,6 +261,9 @@
         <div class="row h-100">
             <div class="col-2 vertical-tabs">
                 <h4 class="sidebar-header">myTools</h4>
+                <div class="platform-info">
+                    <div class="platform-badge" id="platform-badge">Loading...</div>
+                </div>
                 <div class="nav flex-column nav-pills" id="command-tabs"></div>
             </div>
             
@@ -245,6 +277,7 @@
     <script>
         let commands = {};
         let currentExecutions = {};
+        let platformInfo = {};
         const isWindows = navigator.platform.toLowerCase().includes('win');
         
         function saveFormState(cmdId) {
@@ -278,6 +311,21 @@
             }
         }
 
+        async function loadPlatformInfo() {
+            try {
+                const response = await fetch('/api/platform');
+                platformInfo = await response.json();
+                
+                const platformBadge = document.getElementById('platform-badge');
+                const platform = platformInfo.platform === 'windows' ? 'Windows' : 'Unix/Linux';
+                platformBadge.textContent = platform;
+                platformBadge.title = `${platformInfo.system} ${platformInfo.machine}`;
+            } catch (error) {
+                console.error("Error loading platform info:", error);
+                document.getElementById('platform-badge').textContent = isWindows ? 'Windows' : 'Unix/Linux';
+            }
+        }
+
         async function loadCommands() {
             try {
                 const response = await fetch('/api/commands');
@@ -285,15 +333,37 @@
                 generateInterface();
             } catch (error) {
                 console.error("Error loading commands:", error);
+                showNoCommandsMessage();
             }
+        }
+
+        function showNoCommandsMessage() {
+            const contentContainer = document.getElementById('tab-content');
+            contentContainer.innerHTML = `
+                <div class="no-commands">
+                    <h3>Nenhum comando disponível</h3>
+                    <p>Não há comandos compatíveis com esta plataforma ou ocorreu um erro ao carregar os comandos.</p>
+                </div>
+            `;
         }
         
         function generateInterface() {
             const tabsContainer = document.getElementById('command-tabs');
             const contentContainer = document.getElementById('tab-content');
             
+            // Limpa containers
+            tabsContainer.innerHTML = '';
+            contentContainer.innerHTML = '';
+            
+            const commandEntries = Object.entries(commands);
+            
+            if (commandEntries.length === 0) {
+                showNoCommandsMessage();
+                return;
+            }
+            
             let isFirst = true;
-            for (const [cmdId, cmd] of Object.entries(commands)) {
+            for (const [cmdId, cmd] of commandEntries) {
                 const tab = createTab(cmdId, cmd.name, isFirst);
                 const content = createContent(cmdId, cmd, isFirst);
                 
@@ -323,6 +393,7 @@
             
             div.innerHTML = `
                 <h3>${cmd.name}</h3>
+                <div class="command-description">${cmd.description}</div>
                 <div class="form-card">
                     <form id="form-${cmdId}">
                         ${generateFormFields(cmd.options)}
@@ -355,11 +426,20 @@
         }
         
         function generateFormFields(options) {
+            if (!options || options.length === 0) {
+                return '<p class="text-muted">Este comando não possui opções configuráveis.</p>';
+            }
+            
             let html = '<div class="row g-3">';
             
             for (const option of options) {
-                if (option.platforms && !option.platforms.includes(isWindows ? 'windows' : 'unix')) {
-                    continue;
+                // A filtragem por plataforma já é feita no backend
+                // mas mantemos esta verificação como fallback
+                if (option.platforms) {
+                    const currentPlatform = isWindows ? 'windows' : 'unix';
+                    if (!option.platforms.includes(currentPlatform)) {
+                        continue;
+                    }
                 }
                 html += generateField(option);
             }
@@ -454,6 +534,12 @@
                     body: JSON.stringify(data)
                 });
 
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    outputDiv.textContent = `[ERROR]: ${errorText}\n`;
+                    return;
+                }
+
                 const executionId = response.headers.get('X-Execution-ID');
                 if (executionId) {
                     currentExecutions[tool] = executionId;
@@ -504,12 +590,22 @@
             for (const option of commands[cmdId].options) {
                 const element = document.getElementById(option.id);
                 if (element && option.value) {
-                    element.value = option.value;
+                    if (option.type === 'checkbox') {
+                        element.checked = true;
+                    } else {
+                        element.value = option.value;
+                    }
                 }
             }
         }
 
-        loadCommands();
+        // Initialize application
+        async function init() {
+            await loadPlatformInfo();
+            await loadCommands();
+        }
+
+        init();
     </script>
 </body>
 </html>
