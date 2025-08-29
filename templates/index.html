@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>myTools</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-main: #111827;
+            --bg-secondary: #1F2937;
+            --bg-tertiary: #374151;
+            --border-color: #4B5563;
+            --text-primary: #F9FAFB;
+            --text-secondary: #9CA3AF;
+            --accent-primary: #22d3ee;
+            --accent-primary-hover: #67e8f9;
+            --success-color: #34D399;
+            --warning-color: #FBBF24;
+            --danger-color: #ef4444;
+            --danger-color-hover: #dc2626;
+            --monospace-font: 'Roboto Mono', monospace;
+            --ui-font: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            font-family: var(--ui-font);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .vertical-tabs {
+            background-color: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            padding: 1.5rem 0 !important;
+        }
+
+        .sidebar-header {
+            color: var(--text-primary);
+            font-weight: 600;
+            padding: 0 1.5rem 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1rem;
+        }
+        
+        .nav-pills .nav-link {
+            color: var(--text-secondary);
+            border-radius: 0;
+            margin: 0.25rem 0;
+            padding: 0.75rem 1.5rem;
+            border-left: 3px solid transparent;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .nav-pills .nav-link:hover {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+        
+        .nav-pills .nav-link.active {
+            background-color: rgba(34, 211, 238, 0.1);
+            color: var(--accent-primary);
+            border-left: 3px solid var(--accent-primary);
+            font-weight: 500;
+        }
+
+        .main-content {
+            padding: 2rem;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        
+        .tab-pane h3 {
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .form-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .form-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .form-control, .form-select {
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            border-radius: 8px;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.3);
+        }
+
+        .form-check-input {
+            background-color: var(--bg-tertiary);
+            border-color: var(--border-color);
+        }
+        .form-check-input:checked {
+            background-color: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .btn {
+            border-radius: 8px;
+            font-weight: 500;
+            padding: 0.6rem 1.2rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn-execute {
+            background-color: var(--accent-primary);
+            border-color: var(--accent-primary);
+            color: var(--bg-main);
+        }
+        .btn-execute:hover {
+            background-color: var(--accent-primary-hover);
+            border-color: var(--accent-primary-hover);
+            color: var(--bg-main);
+            transform: translateY(-2px);
+        }
+        .btn-execute:disabled {
+             background-color: var(--bg-tertiary);
+             border-color: var(--border-color);
+        }
+
+        .btn-stop {
+            background-color: var(--danger-color);
+            border-color: var(--danger-color);
+            color: white;
+        }
+        .btn-stop:hover {
+            background-color: var(--danger-color-hover);
+            border-color: var(--danger-color-hover);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background-color: var(--bg-tertiary);
+            border-color: var(--border-color);
+            color: var(--text-primary);
+        }
+         .btn-secondary:hover {
+            background-color: var(--border-color);
+            border-color: var(--border-color);
+         }
+
+        .output-container {
+            background-color: #0d1117;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            height: 450px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .output-header {
+            background-color: var(--bg-secondary);
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            display: flex;
+            align-items: center;
+        }
+        .output-header-dots {
+            display: flex;
+            gap: 8px;
+        }
+        .output-header-dots span {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .dot-red { background-color: #ff5f56; }
+        .dot-yellow { background-color: #ffbd2e; }
+        .dot-green { background-color: #27c93f; }
+
+        .output-body {
+            padding: 1rem;
+            font-family: var(--monospace-font);
+            font-size: 0.875rem;
+            color: #c9d1d9;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .spinner {
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--accent-primary);
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 0.5rem;
+        }
+
+        .button-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid h-100">
+        <div class="row h-100">
+            <div class="col-2 vertical-tabs">
+                <h4 class="sidebar-header">myTools</h4>
+                <div class="nav flex-column nav-pills" id="command-tabs"></div>
+            </div>
+            
+            <main class="col-10 main-content">
+                <div class="tab-content" id="tab-content"></div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let commands = {};
+        let currentExecutions = {};
+        const isWindows = navigator.platform.toLowerCase().includes('win');
+        
+        function saveFormState(cmdId) {
+            const form = document.getElementById(`form-${cmdId}`);
+            if (!form || !commands[cmdId]) return;
+
+            const state = {};
+            for (const option of commands[cmdId].options) {
+                const element = document.getElementById(option.id);
+                if (element) {
+                    state[option.id] = option.type === 'checkbox' ? element.checked : element.value;
+                }
+            }
+            localStorage.setItem(`tools-state-${cmdId}`, JSON.stringify(state));
+        }
+
+        function loadFormState(cmdId) {
+            const savedStateJSON = localStorage.getItem(`tools-state-${cmdId}`);
+            if (!savedStateJSON) return;
+
+            const savedState = JSON.parse(savedStateJSON);
+            for (const [key, value] of Object.entries(savedState)) {
+                const element = document.getElementById(key);
+                if (element) {
+                    if (element.type === 'checkbox') {
+                        element.checked = value;
+                    } else {
+                        element.value = value;
+                    }
+                }
+            }
+        }
+
+        async function loadCommands() {
+            try {
+                const response = await fetch('/api/commands');
+                commands = await response.json();
+                generateInterface();
+            } catch (error) {
+                console.error("Error loading commands:", error);
+            }
+        }
+        
+        function generateInterface() {
+            const tabsContainer = document.getElementById('command-tabs');
+            const contentContainer = document.getElementById('tab-content');
+            
+            let isFirst = true;
+            for (const [cmdId, cmd] of Object.entries(commands)) {
+                const tab = createTab(cmdId, cmd.name, isFirst);
+                const content = createContent(cmdId, cmd, isFirst);
+                
+                tabsContainer.appendChild(tab);
+                contentContainer.appendChild(content);
+                isFirst = false;
+            }
+        }
+        
+        function createTab(cmdId, name, active) {
+            const button = document.createElement('button');
+            button.className = `nav-link ${active ? 'active' : ''}`;
+            button.id = `tab-${cmdId}`;
+            button.dataset.bsToggle = 'pill';
+            button.dataset.bsTarget = `#content-${cmdId}`;
+            button.type = 'button';
+            button.role = 'tab';
+            button.textContent = name;
+            return button;
+        }
+        
+        function createContent(cmdId, cmd, active) {
+            const div = document.createElement('div');
+            div.className = `tab-pane fade ${active ? 'show active' : ''}`;
+            div.id = `content-${cmdId}`;
+            div.role = 'tabpanel';
+            
+            div.innerHTML = `
+                <h3>${cmd.name}</h3>
+                <div class="form-card">
+                    <form id="form-${cmdId}">
+                        ${generateFormFields(cmd.options)}
+                        <div class="mt-4">
+                            <div class="button-group">
+                                <button type="submit" class="btn btn-execute" id="execute-${cmdId}">Execute</button>
+                                <button type="button" class="btn btn-stop d-none" id="stop-${cmdId}" onclick="stopExecution('${cmdId}')">Stop</button>
+                                <button type="button" class="btn btn-secondary" onclick="clearOutput('${cmdId}')">Clear</button>
+                                <button type="button" class="btn btn-secondary" onclick="resetForm('${cmdId}')">Reset</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="output-container">
+                    <div class="output-header">
+                        <div class="output-header-dots">
+                            <span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span>
+                        </div>
+                    </div>
+                    <div id="output-${cmdId}" class="output-body"></div>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                setupForm(cmdId);
+                loadFormState(cmdId);
+            }, 0);
+
+            return div;
+        }
+        
+        function generateFormFields(options) {
+            let html = '<div class="row g-3">';
+            
+            for (const option of options) {
+                if (option.platforms && !option.platforms.includes(isWindows ? 'windows' : 'unix')) {
+                    continue;
+                }
+                html += generateField(option);
+            }
+            
+            html += '</div>';
+            return html;
+        }
+        
+        function generateField(option) {
+            const colClass = option.type === 'checkbox' ? 'col-md-3 d-flex align-items-end' : 'col-md-3';
+            
+            if (option.type === 'checkbox') {
+                return `
+                    <div class="${colClass}">
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="${option.id}">
+                            <label class="form-check-label" for="${option.id}">${option.label}</label>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            if (option.type === 'select') {
+                const optionsHtml = option.options.map(opt => 
+                    `<option value="${opt.value}">${opt.text}</option>`
+                ).join('');
+                
+                return `
+                    <div class="${colClass}">
+                        <label for="${option.id}" class="form-label">${option.label}:</label>
+                        <select class="form-select" id="${option.id}" ${option.required ? 'required' : ''}>
+                            <option value="">Select...</option>
+                            ${optionsHtml}
+                        </select>
+                    </div>
+                `;
+            }
+            
+            return `
+                <div class="${colClass}">
+                    <label for="${option.id}" class="form-label">${option.label}:</label>
+                    <input type="${option.type}" class="form-control" id="${option.id}"
+                           ${option.placeholder ? `placeholder="${option.placeholder}"` : ''}
+                           ${option.value ? `value="${option.value}"` : ''}
+                           ${option.min !== undefined ? `min="${option.min}"` : ''}
+                           ${option.max !== undefined ? `max="${option.max}"` : ''}
+                           ${option.required ? 'required' : ''}>
+                </div>
+            `;
+        }
+        
+        function setupForm(cmdId) {
+            const form = document.getElementById(`form-${cmdId}`);
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const data = {};
+                
+                for (const option of commands[cmdId].options) {
+                    const element = document.getElementById(option.id);
+                    if (element) {
+                        const value = option.type === 'checkbox' ? element.checked : element.value;
+                        data[option.id] = value;
+                    }
+                }
+                
+                saveFormState(cmdId);
+                executeCommand(cmdId, data, `output-${cmdId}`);
+            });
+
+            for (const option of commands[cmdId].options) {
+                const element = document.getElementById(option.id);
+                if (element) {
+                    const eventType = ['checkbox', 'select-one'].includes(element.type) ? 'change' : 'input';
+                    element.addEventListener(eventType, () => saveFormState(cmdId));
+                }
+            }
+        }
+        
+        async function executeCommand(tool, data, outputId) {
+            const outputDiv = document.getElementById(outputId);
+            const executeBtn = document.getElementById(`execute-${tool}`);
+            const stopBtn = document.getElementById(`stop-${tool}`);
+            
+            executeBtn.disabled = true;
+            executeBtn.innerHTML = '<span class="spinner"></span>Running...';
+            stopBtn.classList.remove('d-none');
+            
+            try {
+                const response = await fetch(`/execute/${tool}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const executionId = response.headers.get('X-Execution-ID');
+                if (executionId) {
+                    currentExecutions[tool] = executionId;
+                }
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) break;
+                    
+                    const chunk = decoder.decode(value, { stream: true });
+                    outputDiv.textContent += chunk;
+                    outputDiv.scrollTop = outputDiv.scrollHeight;
+                }
+            } catch (error) {
+                outputDiv.textContent += `\n[ERROR]: ${error.message}\n`;
+            } finally {
+                executeBtn.disabled = false;
+                executeBtn.innerHTML = 'Execute';
+                stopBtn.classList.add('d-none');
+                delete currentExecutions[tool];
+            }
+        }
+
+        async function stopExecution(tool) {
+            const executionId = currentExecutions[tool];
+            if (!executionId) return;
+
+            try {
+                await fetch(`/stop/${executionId}`, { method: 'POST' });
+                document.getElementById(`output-${tool}`).textContent += '\n[STOPPED] Execution interrupted\n';
+            } catch (error) {
+                console.error('Error stopping execution:', error);
+            }
+        }
+
+        function clearOutput(tool) {
+            document.getElementById(`output-${tool}`).textContent = '';
+        }
+        
+        function resetForm(cmdId) {
+            const form = document.getElementById(`form-${cmdId}`);
+            form.reset();
+            localStorage.removeItem(`tools-state-${cmdId}`);
+
+            for (const option of commands[cmdId].options) {
+                const element = document.getElementById(option.id);
+                if (element && option.value) {
+                    element.value = option.value;
+                }
+            }
+        }
+
+        loadCommands();
+    </script>
+</body>
+</html>

@@ -1,0 +1,315 @@
+{
+
+
+  "ping": {
+    "name": "Ping",
+    "description": "Tests connectivity with remote host",
+    "target": "host",
+    "windows": {
+      "base": "ping",
+      "flags": {
+        "count": ["-n"],
+        "size": ["-l"],
+        "timeout": ["-w"],
+        "ttl": ["-i"],
+        "continuous": ["-t"],
+        "dont_fragment": ["-f"]
+      }
+    },
+    "unix": {
+      "base": "ping",
+      "flags": {
+        "count": ["-c"],
+        "size": ["-s"],
+        "timeout": ["-W"],
+        "ttl": ["-t"],
+        "interval": ["-i"],
+        "flood": ["-f"],
+        "quiet": ["-q"],
+        "verbose": ["-v"],
+        "numeric": ["-n"]
+      }
+    },
+    "options": [
+      {
+        "id": "host",
+        "label": "Host/IP",
+        "type": "text",
+        "placeholder": "google.com",
+        "required": true
+      },
+      {
+        "id": "count",
+        "label": "Count",
+        "type": "number",
+        "value": "4",
+        "min": 1,
+        "max": 100
+      },
+      {
+        "id": "size",
+        "label": "Size (bytes)",
+        "type": "number",
+        "min": 1,
+        "max": 65500,
+        "placeholder": "32"
+      },
+      {
+        "id": "timeout",
+        "label": "Timeout (ms)",
+        "type": "number",
+        "min": 100,
+        "max": 30000,
+        "placeholder": "1000"
+      },
+      {
+        "id": "ttl",
+        "label": "TTL",
+        "type": "number",
+        "min": 1,
+        "max": 255,
+        "placeholder": "64"
+      },
+      {
+        "id": "interval",
+        "label": "Interval (s)",
+        "type": "text",
+        "placeholder": "1.0",
+        "platforms": ["unix"]
+      },
+      {
+        "id": "continuous",
+        "label": "Continuous",
+        "type": "checkbox"
+      },
+      {
+        "id": "flood",
+        "label": "Flood",
+        "type": "checkbox",
+        "platforms": ["unix"]
+      },
+      {
+        "id": "quiet",
+        "label": "Quiet",
+        "type": "checkbox",
+        "platforms": ["unix"]
+      },
+      {
+        "id": "verbose",
+        "label": "Verbose",
+        "type": "checkbox",
+        "platforms": ["unix"]
+      },
+      {
+        "id": "numeric",
+        "label": "Numeric",
+        "type": "checkbox",
+        "platforms": ["unix"]
+      },
+      {
+        "id": "dont_fragment",
+        "label": "Don't Fragment",
+        "type": "checkbox",
+        "platforms": ["windows"]
+      }
+    ]
+  },
+  
+  
+  "nslookup": {
+    "name": "NSLookup",
+    "description": "DNS lookup",
+    "target": "domain",
+    "windows": {
+      "base": "nslookup",
+      "flags": {
+        "type": ["-type"],
+        "server": []
+      }
+    },
+    "unix": {
+      "base": "nslookup",
+      "flags": {
+        "type": ["-type"],
+        "server": []
+      }
+    },
+    "options": [
+      {
+        "id": "domain",
+        "label": "Domain",
+        "type": "text",
+        "placeholder": "google.com",
+        "required": true
+      },
+      {
+        "id": "type",
+        "label": "Type",
+        "type": "select",
+        "options": [
+          {"value": "A", "text": "A - IPv4"},
+          {"value": "AAAA", "text": "AAAA - IPv6"},
+          {"value": "MX", "text": "MX - Mail Exchange"},
+          {"value": "NS", "text": "NS - Name Server"},
+          {"value": "CNAME", "text": "CNAME - Canonical Name"},
+          {"value": "TXT", "text": "TXT - Text Record"},
+          {"value": "SOA", "text": "SOA - Start of Authority"}
+        ]
+      },
+      {
+        "id": "server",
+        "label": "DNS Server",
+        "type": "text",
+        "placeholder": "8.8.8.8"
+      }
+    ]
+  },
+  
+  
+  "tracert": {
+    "name": "Traceroute",
+    "description": "Traces route to destination",
+    "target": "host",
+    "windows": {
+      "base": "tracert",
+      "flags": {
+        "max_hops": ["-h"],
+        "timeout": ["-w"],
+        "resolve": ["-d"]
+      }
+    },
+    "unix": {
+      "base": "traceroute",
+      "flags": {
+        "max_hops": ["-m"],
+        "timeout": ["-w"],
+        "queries": ["-q"],
+        "numeric": ["-n"]
+      }
+    },
+    "options": [
+      {
+        "id": "host",
+        "label": "Host/IP",
+        "type": "text",
+        "placeholder": "google.com",
+        "required": true
+      },
+      {
+        "id": "max_hops",
+        "label": "Max Hops",
+        "type": "number",
+        "min": 1,
+        "max": 64,
+        "placeholder": "30"
+      },
+      {
+        "id": "timeout",
+        "label": "Timeout (ms)",
+        "type": "number",
+        "min": 100,
+        "max": 10000,
+        "placeholder": "1000"
+      },
+      {
+        "id": "queries",
+        "label": "Queries per hop",
+        "type": "number",
+        "min": 1,
+        "max": 10,
+        "placeholder": "3",
+        "platforms": ["unix"]
+      },
+      {
+        "id": "numeric",
+        "label": "Numeric",
+        "type": "checkbox",
+        "platforms": ["unix"]
+      },
+      {
+        "id": "resolve",
+        "label": "Don't resolve names",
+        "type": "checkbox",
+        "platforms": ["windows"]
+      }
+    ]
+  },
+  
+  
+  "netstat": {
+    "name": "Netstat",
+    "description": "Network statistics",
+    "target": null,
+    "windows": {
+      "base": "netstat",
+      "flags": {
+        "all": ["-a"],
+        "numeric": ["-n"],
+        "processes": ["-o"],
+        "routing": ["-r"],
+        "stats": ["-s"],
+        "tcp": ["-p", "tcp"],
+        "udp": ["-p", "udp"]
+      }
+    },
+    "unix": {
+      "base": "netstat",
+      "flags": {
+        "all": ["-a"],
+        "numeric": ["-n"],
+        "processes": ["-p"],
+        "routing": ["-r"],
+        "stats": ["-s"],
+        "tcp": ["-t"],
+        "udp": ["-u"],
+        "listening": ["-l"]
+      }
+    },
+    "options": [
+      {
+        "id": "all",
+        "label": "All connections",
+        "type": "checkbox"
+      },
+      {
+        "id": "numeric",
+        "label": "Numeric",
+        "type": "checkbox"
+      },
+      {
+        "id": "processes",
+        "label": "Processes",
+        "type": "checkbox"
+      },
+      {
+        "id": "routing",
+        "label": "Routing table",
+        "type": "checkbox"
+      },
+      {
+        "id": "stats",
+        "label": "Statistics",
+        "type": "checkbox"
+      },
+      {
+        "id": "tcp",
+        "label": "TCP only",
+        "type": "checkbox"
+      },
+      {
+        "id": "udp",
+        "label": "UDP only",
+        "type": "checkbox"
+      },
+      {
+        "id": "listening",
+        "label": "Listening only",
+        "type": "checkbox",
+        "platforms": ["unix"]
+      }
+    ]
+  }
+  
+  
+  
+}
