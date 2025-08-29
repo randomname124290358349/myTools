@@ -19,8 +19,7 @@ To get a local copy up and running, follow these simple steps.
 
 ### Prerequisites
 
-*   Python 3.8+
-*   uv (or pip)
+*   uv (https://docs.astral.sh/uv/getting-started/installation/)
 
 ### Installation
 
