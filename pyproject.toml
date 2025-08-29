@@ -1,7 +1,7 @@
 [project]
-name = "mypentools"
+name = "myTools"
 version = "0.1.0"
-description = "Add your description here"
+description = "A web wrapper for machine programs with support for customizable commands."
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
