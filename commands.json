@@ -1,6 +1,4 @@
 {
-
-
   "ping": {
     "name": "Ping",
     "description": "Tests connectivity with remote host",
@@ -115,7 +113,6 @@
     ]
   },
   
-  
   "nslookup": {
     "name": "NSLookup",
     "description": "DNS lookup",
@@ -164,7 +161,6 @@
       }
     ]
   },
-  
   
   "tracert": {
     "name": "Traceroute",
@@ -234,7 +230,6 @@
       }
     ]
   },
-  
   
   "netstat": {
     "name": "Netstat",
@@ -308,8 +303,141 @@
         "platforms": ["unix"]
       }
     ]
+  },
+
+  "ipconfig": {
+    "name": "IP Configuration",
+    "description": "Display and configure IP settings (Windows only)",
+    "target": null,
+    "platforms": ["windows"],
+    "windows": {
+      "base": "ipconfig",
+      "flags": {
+        "all": ["/all"],
+        "release": ["/release"],
+        "renew": ["/renew"],
+        "flushdns": ["/flushdns"],
+        "displaydns": ["/displaydns"],
+        "registerdns": ["/registerdns"]
+      }
+    },
+    "options": [
+      {
+        "id": "all",
+        "label": "Show all configuration",
+        "type": "checkbox"
+      },
+      {
+        "id": "release",
+        "label": "Release IP address",
+        "type": "checkbox"
+      },
+      {
+        "id": "renew",
+        "label": "Renew IP address",
+        "type": "checkbox"
+      },
+      {
+        "id": "flushdns",
+        "label": "Flush DNS cache",
+        "type": "checkbox"
+      },
+      {
+        "id": "displaydns",
+        "label": "Display DNS cache",
+        "type": "checkbox"
+      },
+      {
+        "id": "registerdns",
+        "label": "Register DNS",
+        "type": "checkbox"
+      }
+    ]
+  },
+
+  "ifconfig": {
+    "name": "Interface Configuration",
+    "description": "Display and configure network interfaces (Unix only)",
+    "target": "interface",
+    "platforms": ["unix"],
+    "unix": {
+      "base": "ifconfig",
+      "flags": {
+        "all": ["-a"],
+        "up": ["up"],
+        "down": ["down"]
+      }
+    },
+    "options": [
+      {
+        "id": "interface",
+        "label": "Interface (optional)",
+        "type": "text",
+        "placeholder": "eth0"
+      },
+      {
+        "id": "all",
+        "label": "Show all interfaces",
+        "type": "checkbox"
+      },
+      {
+        "id": "up",
+        "label": "Bring interface up",
+        "type": "checkbox"
+      },
+      {
+        "id": "down",
+        "label": "Bring interface down",
+        "type": "checkbox"
+      }
+    ]
+  },
+
+  "arp": {
+    "name": "ARP Table",
+    "description": "Display and modify ARP table",
+    "target": "host",
+    "windows": {
+      "base": "arp",
+      "flags": {
+        "display_all": ["-a"],
+        "display_host": ["-a"],
+        "delete": ["-d"]
+      }
+    },
+    "unix": {
+      "base": "arp",
+      "flags": {
+        "display_all": ["-a"],
+        "display_host": [],
+        "delete": ["-d"],
+        "numeric": ["-n"]
+      }
+    },
+    "options": [
+      {
+        "id": "host",
+        "label": "Host/IP (optional)",
+        "type": "text",
+        "placeholder": "192.168.1.1"
+      },
+      {
+        "id": "display_all",
+        "label": "Display all entries",
+        "type": "checkbox",
+        "value": "true"
+      },
+      {
+        "id": "delete",
+        "label": "Delete entry",
+        "type": "checkbox"
+      },
+      {
+        "id": "numeric",
+        "label": "Numeric output",
+        "type": "checkbox",
+        "platforms": ["unix"]
+      }
+    ]
   }
-  
-  
-  
 }
