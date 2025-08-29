@@ -47,6 +47,8 @@ To get a local copy up and running, follow these simple steps.
 ├── guides/
 ├── templates/
 │   └── index.html
+├── .python-version
+├── README.md
 ├── app.py
 ├── commands.json
 ├── favicon.ico
@@ -58,6 +60,3 @@ To get a local copy up and running, follow these simple steps.
 *   **templates/**: Holds the HTML templates for the web interface.
 *   **app.py**: The main Flask application file.
 *   **commands.json**: The configuration file for the custom commands.
-*   **favicon.ico**: The application's icon.
-*   **pyproject.toml**: The project's build configuration.
-*   **uv.lock**: The lock file for the project's dependencies.
